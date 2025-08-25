@@ -37,7 +37,24 @@ class ProductsController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      return res.json({ message: "upadate" });
+      const id = z
+        .string()
+        .transform((value) => Number(value))
+        .refine((value) => !isNaN(value), { message: "id must be a number" })
+        .parse(req.params.id);
+
+      const bodySchema = z.object({
+        name: z.string().trim().min(5),
+        price: z.number().gt(0, { message: "value must be greater than 0" }),
+      });
+
+      const { name, price } = bodySchema.parse(req.body);
+
+      await knexInstance<ProductRepository>("products")
+        .update({ name, price, updated_at: knexInstance.fn.now() })
+        .where({ id });
+
+      return res.json();
     } catch (error) {
       next(error);
     }
