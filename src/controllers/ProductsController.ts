@@ -1,5 +1,5 @@
 import { knexInstance } from "@/database/knex.js";
-import { ProductRepository } from "@/database/Types/products_repository.js";
+import { ProductRepository } from "@/database/Types/productsRepository.js";
 import { AppError } from "@/utils/AppError.js";
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
