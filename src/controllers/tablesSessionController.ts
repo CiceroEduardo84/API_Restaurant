@@ -14,7 +14,7 @@ class TablesSessionsControler {
       const { table_id } = bodySchema.parse(req.body);
 
       const session = await knexInstance<TablesSessionsRepository>(
-        "tables_sessions"
+        "tables_session"
       )
         .where({ table_id })
         .orderBy("opened_at", "desc")
@@ -24,7 +24,7 @@ class TablesSessionsControler {
         throw new AppError("This table is already open");
       }
 
-      await knexInstance<TablesSessionsRepository>("tables_sessions").insert({
+      await knexInstance<TablesSessionsRepository>("tables_session").insert({
         table_id,
         opened_at: knexInstance.fn.now(),
       });
@@ -38,7 +38,7 @@ class TablesSessionsControler {
   async index(req: Request, res: Response, next: NextFunction) {
     try {
       const sessions = await knexInstance<TablesSessionsRepository>(
-        "tables_sessions"
+        "tables_session"
       ).orderBy("closed_at");
 
       return res.json(sessions);
@@ -56,7 +56,7 @@ class TablesSessionsControler {
         .parse(req.params.id);
 
       const session = await knexInstance<TablesSessionsRepository>(
-        "tables_sessions"
+        "tables_session"
       )
         .where({ id })
         .first();
@@ -69,7 +69,7 @@ class TablesSessionsControler {
         throw new AppError("This session table is alredy closed");
       }
 
-      await knexInstance<TablesSessionsRepository>("tables_sessions")
+      await knexInstance<TablesSessionsRepository>("tables_session")
         .update({
           closed_at: knexInstance.fn.now(),
         })
